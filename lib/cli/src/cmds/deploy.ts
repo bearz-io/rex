@@ -5,7 +5,7 @@ import { VERSION } from "../version.ts";
 export const deployCommand = new Command()
     .name("rex-deploy")
     .description(
-        "Runs a deployment.",
+        "Runs a single deployment from a rexfile.",
     )
     .version(VERSION)
     .arguments("[target:string[]]")

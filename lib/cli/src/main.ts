@@ -2,6 +2,7 @@ import { Command } from "@cliffy/command";
 import { taskCommand } from "./cmds/task.ts";
 import { jobCommand } from "./cmds/job.ts";
 import { deployCommand } from "./cmds/deploy.ts";
+import { listCommand } from "./cmds/list.ts";
 import { VERSION } from "./version.ts";
 
 const app = new Command()
@@ -15,7 +16,9 @@ const app = new Command()
     })
     .command("task", taskCommand)
     .command("job", jobCommand)
+    .command("list", listCommand)
     .command("deploy", deployCommand);
+
 
 if (import.meta.main) {
     await app.parse(Deno.args);

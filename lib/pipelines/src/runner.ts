@@ -239,17 +239,17 @@ export class Runner {
                 }
                 break;
                 case "list":
-                    writer.writeLine("Tasks:");
+                    writer.writeLine("TASKS:");
                     for (const [key, _] of res.tasks.entries()) {
-                        writer.writeLine(`  ${key}`);
+                        writer.writeLine(`  ${key}  ${_.description ?? ""}`);
                     }
-                    writer.writeLine("Jobs:");
+                    writer.writeLine("JOBS:");
                     for (const [key, _] of res.jobs.entries()) {
-                        writer.writeLine(`  ${key}`);
+                        writer.writeLine(`  ${key}  ${_.description ?? ""}`);
                     }
-                    writer.writeLine("Deployments:");
+                    writer.writeLine("DEPLOYMENTS:");
                     for (const [key, _] of res.deployments.entries()) {
-                        writer.writeLine(`  ${key}`);
+                        writer.writeLine(`  ${key}  ${_.description ?? ""}`);
                     }
                     break;
                 case "deploy":
