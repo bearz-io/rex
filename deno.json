@@ -1,7 +1,9 @@
 {
     "fmt": {
         "exclude": [
-            "**/*.md"
+            "**/*.md",
+            "**/*.yaml",
+            ".github/**"
         ],
         "lineWidth": 100,
         "indentWidth": 4,

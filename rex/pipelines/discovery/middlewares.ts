@@ -55,7 +55,6 @@ export class RexfileDiscovery extends DiscoveryPipelineMiddleware {
             }
 
             ctx.file = file;
-
             const mod = await import(file) as RexFileImports;
 
             if (!mod.tasks) {

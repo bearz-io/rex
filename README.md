@@ -19,6 +19,7 @@ rex task default
 rex job build --log-level debug
 
 # runs a deploy job with the context
+rex deploy app --context production
 ```
 
 ## Rexfile
