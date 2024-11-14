@@ -117,6 +117,29 @@ export class PipelineWriter extends DefaultAnsiWriter implements RexWriter {
         return this;
     }
 
+    override enabled(level: AnsiLogLevel): boolean {
+        return this.level >= level;
+    }
+
+    levelEnabled(level: LogLevel): boolean {
+        switch (level) {
+            case LogLevel.Debug:
+                return this.level >= AnsiLogLevel.Debug;
+            case LogLevel.Error:
+                return this.level >= AnsiLogLevel.Error;
+            case LogLevel.Fatal:
+                return this.level >= AnsiLogLevel.Critical;
+            case LogLevel.Info:
+                return this.level >= AnsiLogLevel.Information;
+            case LogLevel.Warn:
+                return this.level >= AnsiLogLevel.Warning;
+            case LogLevel.Trace:
+                return this.level >= AnsiLogLevel.Trace;
+        }
+
+        return false;
+    }
+
     mask(value: string): this {
         return this.write(secretMasker.mask(value) ?? "");
     }

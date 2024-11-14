@@ -1,7 +1,7 @@
 import { JobMap, REX_JOBS } from "@rex/jobs";
 import { REX_TASKS, TaskMap, toError } from "@rex/tasks";
 import { DeploymentMap, REX_DEPLOYMENTS } from "@rex/deployments";
-import { LogLevel, type ExecutionContext } from "@rex/primitives";
+import type { ExecutionContext } from "@rex/primitives";
 import type { Next } from "../pipeline.ts";
 import { type DiscoveryPipelineContext, DiscoveryPipelineMiddleware } from "./pipelines.ts";
 import { exists, realPath } from "@bearz/fs";
@@ -60,8 +60,6 @@ export class RexfileDiscovery extends DiscoveryPipelineMiddleware {
 
             ctx.file = file;
             const mod = await import(file) as RexFileImports;
-            if (writer.enabled(LogLevel.Debug))
-                console.debug("loaded module", mod);
 
             if (!mod.tasks) {
                 if (globalTasks.size === 0) {
