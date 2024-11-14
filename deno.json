@@ -23,7 +23,7 @@
         "prep": "deno fmt ./rex/** && deno lint ./rex/**",
         "publish:test": "deno publish --dry-run --allow-dirty",
         "rex": "deno run -A ./rex/cli/main.ts",
-        "version:update": "deno run -A ./eng/tasks/update-version.ts"
+        "update:version": "deno run -A ./eng/tasks/update-version.ts"
     },
     "workspace": [
         "./rex/rexfile",

@@ -1,7 +1,7 @@
 import { JobMap, REX_JOBS } from "@rex/jobs";
 import { REX_TASKS, TaskMap, toError } from "@rex/tasks";
 import { DeploymentMap, REX_DEPLOYMENTS } from "@rex/deployments";
-import type { ExecutionContext } from "@rex/primitives";
+import { LogLevel, type ExecutionContext } from "@rex/primitives";
 import type { Next } from "../pipeline.ts";
 import { type DiscoveryPipelineContext, DiscoveryPipelineMiddleware } from "./pipelines.ts";
 import { exists, realPath } from "@bearz/fs";
@@ -19,6 +19,8 @@ export class RexfileDiscovery extends DiscoveryPipelineMiddleware {
     override async run(context: DiscoveryPipelineContext, next: Next): Promise<void> {
         const ctx = context as DiscoveryPipelineContext;
         try {
+            const { writer } = ctx;
+            writer.trace("Discovering tasks");
             const globalTasks = REX_TASKS;
             const globalJobs = REX_JOBS;
             const globalDeployments = REX_DEPLOYMENTS;
@@ -32,10 +34,12 @@ export class RexfileDiscovery extends DiscoveryPipelineMiddleware {
             if (cwd.startsWith("http")) {
                 const url = new URL(cwd);
                 cwd = url.pathname;
+                writer.debug(`CWD: ${cwd}`);
             }
 
-            if (file === undefined) {
+            if (file === undefined || file === null || file === "") {
                 file = join(cwd, "rexfile.ts");
+                writer.trace(`No tasks file specified.  Using ${file}`);
             }
             if (!isAbsolute(file)) {
                 file = await realPath(file);
@@ -56,6 +60,8 @@ export class RexfileDiscovery extends DiscoveryPipelineMiddleware {
 
             ctx.file = file;
             const mod = await import(file) as RexFileImports;
+            if (writer.enabled(LogLevel.Debug))
+                console.debug("loaded module", mod);
 
             if (!mod.tasks) {
                 if (globalTasks.size === 0) {

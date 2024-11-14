@@ -23,6 +23,7 @@
     "jsr:@cliffy/flags@1.0.0-rc.7": "1.0.0-rc.7",
     "jsr:@cliffy/internal@1.0.0-rc.7": "1.0.0-rc.7",
     "jsr:@cliffy/table@1.0.0-rc.7": "1.0.0-rc.7",
+    "jsr:@rex/rexfile@0.0.0-alpha.0": "0.0.0-alpha.0",
     "jsr:@std/encoding@^1.0.5": "1.0.5",
     "jsr:@std/fmt@~1.0.2": "1.0.2",
     "jsr:@std/fs@1.0.0": "1.0.0",
@@ -185,6 +186,18 @@
       "integrity": "9fdd9776eda28a0b397981c400eeb1aa36da2371b43eefe12e6ff555290e3180",
       "dependencies": [
         "jsr:@std/fmt"
+      ]
+    },
+    "@rex/rexfile@0.0.0-alpha.0": {
+      "integrity": "a2ceb9ca6be61076f16209b1e4b3b7bb04bea04730f5765be8e7950665c3f645",
+      "dependencies": [
+        "jsr:@bearz/dotenv",
+        "jsr:@bearz/env",
+        "jsr:@bearz/exec",
+        "jsr:@bearz/fs",
+        "jsr:@bearz/process-elevated",
+        "jsr:@bearz/shells",
+        "jsr:@std/path@^1.0.8"
       ]
     },
     "@std/encoding@1.0.5": {

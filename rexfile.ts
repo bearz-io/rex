@@ -1,6 +1,7 @@
 import { WINDOWS } from "@bearz/runtime-info/os";
-import { cmd, deploy, job, scriptTask, task } from "@rex/rexfile";
+import { cmd, deploy, job, scriptTask, task } from "jsr:@rex/rexfile@0.0.0-alpha.0";
 
+console.log("Test");
 task("test", (_) => console.log("Hello, world!"));
 
 // a tasks to dependents on other tasks

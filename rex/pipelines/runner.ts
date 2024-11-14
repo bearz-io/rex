@@ -78,6 +78,10 @@ export class Runner {
             }
         }
 
+        writer.trace(`log level: ${writer.level}`);
+        writer.trace(`file: ${file}`);
+        writer.trace(`command: ${command}`);
+
         cwd ??= getCwd();
 
         if (options.envFile) {
@@ -101,7 +105,10 @@ export class Runner {
             }
         }
 
+        writer.trace(`CWD: ${cwd}`);
+
         file ??= join(cwd, "rexfile.ts");
+        writer.trace(`Rexfile: ${file}`);
 
         timeout ??= 60 * 3;
         if (timeout < 1) {
@@ -188,7 +195,18 @@ export class Runner {
                 bus: bus,
             });
 
+            writer.trace("Running discovery pipeline");
             const res = await discoveryPipeline.run(discoveryContext);
+            writer.trace(`Rexfile ${res.file} discovered`);
+            if (res.error) {
+                writer.error(res.error);
+                exit(1);
+            }
+
+            if (res.tasks.size === 0 && res.jobs.size === 0 && res.deployments.size === 0) {
+                writer.error("No tasks, jobs, or deployments found.");
+                exit(1);
+            }
 
             switch (command) {
                 case "task":
