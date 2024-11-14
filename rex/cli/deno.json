@@ -1,6 +1,6 @@
 {
-    "name": "@bearz/cli",
-    "description": "cli module",
+    "name": "@rex/cli",
+    "description": "rex cli task, jobs, and deployments runner",
     "version": "0.0.0-alpha.0",
     "exports": {
         ".": "./main.ts"
