@@ -5,7 +5,7 @@ const __dirname = dirname(fromFileUrl(import.meta.url));
 
 const engDir = dirname(__dirname);
 const rootDir = dirname(engDir);
-const libDir = join(rootDir, "lib");
+const libDir = join(rootDir, "rex");
 
 async function isFile(path: string): Promise<boolean> {
     try {
@@ -22,7 +22,7 @@ for await (const entry of walk(libDir)) {
 
         let modExists = await isFile(mod);
         if (!modExists) {
-            mod = join(entry.path, "src", "mod.ts");
+            mod = join(entry.path, "main.ts");
             modExists = await isFile(mod);
         }
 
@@ -30,19 +30,20 @@ for await (const entry of walk(libDir)) {
             const readmeContent = await Deno.readTextFile(readme);
             const modContent = await Deno.readTextFile(mod);
 
-            const overviewIndex = readmeContent.indexOf("## Overview");
             const modCommentEndIndex = modContent.indexOf("*/");
-            if (readmeContent.indexOf("## Overview") > -1) {
+            if (readmeContent.length > 0) {
                 if (modCommentEndIndex > -1) {
                     const modContentWithoutComment = modContent.slice(modCommentEndIndex + 2);
                     const newModContent = `/**
- * ${readmeContent.slice(overviewIndex).replaceAll("\n", "\n * ")}
+ * ${readmeContent.replaceAll("\n", "\n * ")}
+ * @module
  */`;
 
                     await Deno.writeTextFile(mod, newModContent + modContentWithoutComment);
                 } else {
                     const newModContent = `/**
- * ${readmeContent.slice(overviewIndex).replaceAll("\n", "\n * ")}
+ * ${readmeContent.replaceAll("\n", "\n * ")}
+ * @module
  */
 ${modContent}`;
                     await Deno.writeTextFile(mod, newModContent);

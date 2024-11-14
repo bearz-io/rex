@@ -1,8 +1,0 @@
-{
-    "name": "@bearz/rex",
-    "description": "A module for implementing rexfiles",
-    "version": "0.0.0",
-    "exports": {
-        ".": "./src/mod.ts"
-    }
-}

@@ -20,10 +20,10 @@ app.name("create-mod")
                 ".": "./src/mod.ts",
             },
         };
-        const lib = join(projectRoot, "lib");
+        const lib = join(projectRoot, "rex");
         await ensureDir(lib);
 
-        const dir = join(projectRoot, "lib", name);
+        const dir = join(projectRoot, "rex", name);
         await Deno.mkdir(dir);
         await Deno.mkdir(join(dir, "src"));
         await Deno.writeTextFile(join(dir, "deno.json"), JSON.stringify(data, null, 4));
@@ -40,7 +40,7 @@ app.name("create-mod")
 
         const json = JSON.parse(await Deno.readTextFile(join(projectRoot, "deno.json")));
         json.workspace ??= [];
-        json.workspace.push(`./lib/${name}`);
+        json.workspace.push(`./rex/${name}`);
 
         await Deno.writeTextFile(join(projectRoot, "deno.json"), JSON.stringify(json, null, 4));
     });
