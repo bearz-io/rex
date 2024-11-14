@@ -1,7 +1,7 @@
-# 🦖 Rex 🦖
+# @rex/cli
 
-🦖 Rex is a cli task, job, and deployment runner.  The cli
-executes tasks, jobs, and deployments defined in `rexfiles.ts` files.  
+The rex cli task, job, and deployment runner.  The cli
+executes rexfiles.ts
 
 ## Documentation
 
@@ -22,8 +22,6 @@ rex job build --log-level debug
 ```
 
 ## Rexfile
-
-Sample rex file.
 
 ```ts
 import { WINDOWS } from "@bearz/runtime-info/os";

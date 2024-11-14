@@ -2,6 +2,7 @@
   "version": "4",
   "specifiers": {
     "jsr:@bearz/ansi@^0.0.0": "0.0.0",
+    "jsr:@bearz/assert@0.0.0-alpha.2": "0.0.0-alpha.2",
     "jsr:@bearz/chars@^0.0.0": "0.0.0",
     "jsr:@bearz/ci-env@^0.0.0": "0.0.0",
     "jsr:@bearz/debug@^0.0.0": "0.0.0",
@@ -26,12 +27,15 @@
     "jsr:@std/fmt@~1.0.2": "1.0.2",
     "jsr:@std/fs@1.0.0": "1.0.0",
     "jsr:@std/path@*": "1.0.8",
+    "jsr:@std/path@^1.0.2": "1.0.8",
     "jsr:@std/path@^1.0.6": "1.0.8",
     "jsr:@std/path@^1.0.8": "1.0.8",
     "jsr:@std/text@~1.0.7": "1.0.7",
     "npm:@types/node@*": "22.5.4",
     "npm:@types/node@^22.9.0": "22.9.0",
     "npm:@types/twig@*": "1.12.16",
+    "npm:assertion-error@^2.0.1": "2.0.1",
+    "npm:chai@^5.1.1": "5.1.2",
     "npm:twig@*": "1.17.1"
   },
   "jsr": {
@@ -43,6 +47,13 @@
         "jsr:@bearz/process",
         "jsr:@bearz/runtime-info",
         "jsr:@bearz/strings"
+      ]
+    },
+    "@bearz/assert@0.0.0-alpha.2": {
+      "integrity": "3b98281498d6ade3ece5870bec8972e54534f8dec53c52609d55c90c5ad084bb",
+      "dependencies": [
+        "npm:assertion-error",
+        "npm:chai"
       ]
     },
     "@bearz/chars@0.0.0": {
@@ -181,7 +192,10 @@
       "integrity": "87e9dfcdd3ca7c066e0c3c657c1f987c82888eb8103a3a3baa62684ffeb0f7a7"
     },
     "@std/fs@1.0.0": {
-      "integrity": "d72e4a125af7168d717a2ed1dca77a728b422b0d138fd20579e3fa41a77da943"
+      "integrity": "d72e4a125af7168d717a2ed1dca77a728b422b0d138fd20579e3fa41a77da943",
+      "dependencies": [
+        "jsr:@std/path@^1.0.2"
+      ]
     },
     "@std/path@1.0.8": {
       "integrity": "548fa456bb6a04d3c1a1e7477986b6cffbce95102d0bb447c67c4ee70e0364be"
@@ -212,6 +226,9 @@
     "@types/twig@1.12.16": {
       "integrity": "sha512-6kXSQwqxWxdHVITY6lur6pVpKbTk5D8R/ZUn2/7Y2AACKFlRqO4jbtHgWPDLe7JUc91sZQhkmopboYDABtZqlA=="
     },
+    "assertion-error@2.0.1": {
+      "integrity": "sha512-Izi8RQcffqCeNVgFigKli1ssklIbpHnCYc6AknXGYoB6grJqyeby7jv12JUQgmTAnIDnbck1uxksT4dzN3PWBA=="
+    },
     "balanced-match@1.0.2": {
       "integrity": "sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw=="
     },
@@ -222,8 +239,24 @@
         "concat-map"
       ]
     },
+    "chai@5.1.2": {
+      "integrity": "sha512-aGtmf24DW6MLHHG5gCx4zaI3uBq3KRtxeVs0DjFH6Z0rDNbsvTxFASFvdj79pxjxZ8/5u3PIiN3IwEIQkiiuPw==",
+      "dependencies": [
+        "assertion-error",
+        "check-error",
+        "deep-eql",
+        "loupe",
+        "pathval"
+      ]
+    },
+    "check-error@2.1.1": {
+      "integrity": "sha512-OAlb+T7V4Op9OwdkjmguYRqncdlx5JiofwOAUkmTF+jNdHwzTaTs4sRAGpzLF3oOz5xAyDGrPgeIDFQmDOTiJw=="
+    },
     "concat-map@0.0.1": {
       "integrity": "sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg=="
+    },
+    "deep-eql@5.0.2": {
+      "integrity": "sha512-h5k/5U50IJJFpzfL6nO9jaaumfjO/f2NjK/oYB2Djzm4p9L+3T9qWpZqZ2hAbLPuuYq9wrU08WQyBTL5GbPk5Q=="
     },
     "foreachasync@3.0.0": {
       "integrity": "sha512-J+ler7Ta54FwwNcx6wQRDhTIbNeyDcARMkOcguEqnEdtm0jKvN3Li3PDAb2Du3ubJYEWfYL83XMROXdsXAXycw=="
@@ -231,11 +264,17 @@
     "locutus@2.0.32": {
       "integrity": "sha512-fr7OCpbE4xeefhHqfh6hM2/l9ZB3XvClHgtgFnQNImrM/nqL950o6FO98vmUH8GysfQRCcyBYtZ4C8GcY52Edw=="
     },
+    "loupe@3.1.2": {
+      "integrity": "sha512-23I4pFZHmAemUnz8WZXbYRSKYj801VDaNv9ETuMh7IrMc7VuVVSo+Z9iLE3ni30+U48iDWfi30d3twAXBYmnCg=="
+    },
     "minimatch@3.0.8": {
       "integrity": "sha512-6FsRAQsxQ61mw+qP1ZzbL9Bc78x2p5OqNgNpnoAFLTrX8n5Kxph0CsnhmKKNXTWjXqU5L0pGPR7hYk+XWZr60Q==",
       "dependencies": [
         "brace-expansion"
       ]
+    },
+    "pathval@2.0.0": {
+      "integrity": "sha512-vE7JKRyES09KiunauX7nd2Q9/L7lhok4smP9RZTDeD4MVs72Dp2qNFVz39Nz5a0FVEW0BJR6C0DYrq6unoziZA=="
     },
     "regenerator-runtime@0.14.1": {
       "integrity": "sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw=="
@@ -262,6 +301,7 @@
   "workspace": {
     "dependencies": [
       "jsr:@bearz/ansi@^0.0.0",
+      "jsr:@bearz/assert@0.0.0-alpha.2",
       "jsr:@bearz/chars@^0.0.0",
       "jsr:@bearz/ci-env@^0.0.0",
       "jsr:@bearz/dotenv@^0.0.0",
