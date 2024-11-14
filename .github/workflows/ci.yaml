@@ -7,7 +7,7 @@ on:
     tags-ignore:
       - "*"
     paths:
-      - "lib/**"
+      - "rex/**"
       - ".github/workflows/ci.yaml"
 
 jobs:

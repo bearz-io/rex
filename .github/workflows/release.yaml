@@ -7,7 +7,7 @@ on:
     branches-ignore:
       - "*"
     paths:
-      - "lib/**"
+      - "rex/**"
       - ".github/workflows/release.yaml"
 
 jobs:
