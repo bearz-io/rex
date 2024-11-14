@@ -3,6 +3,6 @@
     "description": "tasks module",
     "version": "0.0.0",
     "exports": {
-        ".": "./src/mod.ts"
+        ".": "./mod.ts"
     }
 }

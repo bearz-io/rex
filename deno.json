@@ -19,10 +19,11 @@
         "coverage": "deno test ./lib/** --coverage=.artifacts/code-coverage -A --unstable-ffi",
         "lcov": "deno coverage .artifacts/code-coverage --lcov > .artifacts/code-coverage.lcov",
         "prep": "deno fmt ./lib/** && deno lint ./lib/**",
-        "publish:test": "deno publish --dry-run --allow-dirty"
+        "publish:test": "deno publish --dry-run --allow-dirty",
+        "rex": "deno run -A ./lib/cli/main.ts"
     },
     "workspace": [
-        "./lib/rex",
+        "./lib/rexfile",
         "./lib/tasks-win32",
         "./lib/tasks",
         "./lib/jobs",
