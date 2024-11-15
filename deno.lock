@@ -1,22 +1,26 @@
 {
   "version": "4",
   "specifiers": {
-    "jsr:@bearz/ansi@^0.0.0": "0.0.0",
+    "jsr:@bearz/ansi@^0.0.1": "0.0.1",
     "jsr:@bearz/assert@0.0.0-alpha.2": "0.0.0-alpha.2",
     "jsr:@bearz/chars@^0.0.0": "0.0.0",
-    "jsr:@bearz/ci-env@^0.0.0": "0.0.0",
+    "jsr:@bearz/ci-env@^0.0.1": "0.0.1",
     "jsr:@bearz/debug@^0.0.0": "0.0.0",
     "jsr:@bearz/dotenv@^0.0.0": "0.0.0",
+    "jsr:@bearz/dotenv@^0.0.1": "0.0.1",
     "jsr:@bearz/env@^0.0.0": "0.0.0",
     "jsr:@bearz/exec@^0.0.1": "0.0.1",
+    "jsr:@bearz/exec@^0.0.2": "0.0.2",
     "jsr:@bearz/fmt@^0.0.0": "0.0.0",
     "jsr:@bearz/fs@^0.0.0": "0.0.0",
     "jsr:@bearz/functional@^0.0.0": "0.0.0",
     "jsr:@bearz/process-elevated@^0.0.0": "0.0.0",
     "jsr:@bearz/process@^0.0.0": "0.0.0",
+    "jsr:@bearz/runtime-info@*": "0.0.0",
     "jsr:@bearz/runtime-info@^0.0.0": "0.0.0",
     "jsr:@bearz/secrets@^0.0.0": "0.0.0",
     "jsr:@bearz/shells@^0.0.1": "0.0.1",
+    "jsr:@bearz/shells@^0.0.2": "0.0.2",
     "jsr:@bearz/slices@^0.0.0": "0.0.0",
     "jsr:@bearz/strings@^0.0.0": "0.0.0",
     "jsr:@cliffy/command@1.0.0-rc.7": "1.0.0-rc.7",
@@ -41,13 +45,13 @@
     "npm:twig@*": "1.17.1"
   },
   "jsr": {
-    "@bearz/ansi@0.0.0": {
-      "integrity": "c51b4984d967b7bba8c8ad36e0a5e3a7b9c82123ccc9577ea22ac188affee071",
+    "@bearz/ansi@0.0.1": {
+      "integrity": "786e81213e1d396fa9dc8f467a41fa7019359e5049f3a8629905b3a3d7d96c2c",
       "dependencies": [
         "jsr:@bearz/env",
         "jsr:@bearz/fmt",
         "jsr:@bearz/process",
-        "jsr:@bearz/runtime-info",
+        "jsr:@bearz/runtime-info@^0.0.0",
         "jsr:@bearz/strings"
       ]
     },
@@ -62,12 +66,15 @@
     "@bearz/chars@0.0.0": {
       "integrity": "51ee7c73f3b67261569bde432a1ab080c9ef536467b22d8215549a8a8aa3566a"
     },
-    "@bearz/ci-env@0.0.0": {
-      "integrity": "5a3124230096c010141a501213ca6f735cf3865bf6694d6fa7b5d656baf24091",
+    "@bearz/ci-env@0.0.1": {
+      "integrity": "5a130c22319cebaa99df58ac818433abb5f67ca2e09bf9bdcfc24585b5083f3e",
       "dependencies": [
         "jsr:@bearz/ansi",
+        "jsr:@bearz/dotenv@^0.0.1",
         "jsr:@bearz/env",
-        "jsr:@bearz/fmt"
+        "jsr:@bearz/fmt",
+        "jsr:@bearz/fs",
+        "jsr:@bearz/secrets"
       ]
     },
     "@bearz/debug@0.0.0": {
@@ -81,7 +88,16 @@
       "dependencies": [
         "jsr:@bearz/chars",
         "jsr:@bearz/env",
-        "jsr:@bearz/runtime-info",
+        "jsr:@bearz/runtime-info@^0.0.0",
+        "jsr:@bearz/strings"
+      ]
+    },
+    "@bearz/dotenv@0.0.1": {
+      "integrity": "85de368ec8997f0306112da64feb3b8f574d808e894834d473d9d65802ed6534",
+      "dependencies": [
+        "jsr:@bearz/chars",
+        "jsr:@bearz/env",
+        "jsr:@bearz/runtime-info@^0.0.0",
         "jsr:@bearz/strings"
       ]
     },
@@ -89,7 +105,7 @@
       "integrity": "1943ae30037be448dcf25c5a63ed8016663ce317aad4ddea6c9ff6273cdf174c",
       "dependencies": [
         "jsr:@bearz/chars",
-        "jsr:@bearz/runtime-info",
+        "jsr:@bearz/runtime-info@^0.0.0",
         "jsr:@bearz/strings"
       ]
     },
@@ -99,7 +115,18 @@
         "jsr:@bearz/debug",
         "jsr:@bearz/env",
         "jsr:@bearz/fs",
-        "jsr:@bearz/runtime-info",
+        "jsr:@bearz/runtime-info@^0.0.0",
+        "jsr:@bearz/strings",
+        "jsr:@std/path@^1.0.6"
+      ]
+    },
+    "@bearz/exec@0.0.2": {
+      "integrity": "8dafdc57ded9d56b6949c195707d82255d02a95c032c52b3dff3f4863eceb740",
+      "dependencies": [
+        "jsr:@bearz/debug",
+        "jsr:@bearz/env",
+        "jsr:@bearz/fs",
+        "jsr:@bearz/runtime-info@^0.0.0",
         "jsr:@bearz/strings",
         "jsr:@std/path@^1.0.6"
       ]
@@ -114,7 +141,7 @@
       "integrity": "3a16313de26ba1350a9fc13e659878775258051f5ba241a26ad16ea7ffa5b664",
       "dependencies": [
         "jsr:@bearz/debug",
-        "jsr:@bearz/runtime-info",
+        "jsr:@bearz/runtime-info@^0.0.0",
         "jsr:@std/path@^1.0.6"
       ]
     },
@@ -142,9 +169,18 @@
     "@bearz/shells@0.0.1": {
       "integrity": "74a2e6ce48dfd586e546f7a9fe6871d0f63c4ce0794d0f48de354c359176e19f",
       "dependencies": [
-        "jsr:@bearz/exec",
+        "jsr:@bearz/exec@^0.0.1",
         "jsr:@bearz/fs",
-        "jsr:@bearz/runtime-info",
+        "jsr:@bearz/runtime-info@^0.0.0",
+        "jsr:@std/path@^1.0.6"
+      ]
+    },
+    "@bearz/shells@0.0.2": {
+      "integrity": "421108a4358091b214cd4b7b46e89ebeb9d22c58447cfb2d7fadbf9aa94f6087",
+      "dependencies": [
+        "jsr:@bearz/exec@^0.0.2",
+        "jsr:@bearz/fs",
+        "jsr:@bearz/runtime-info@^0.0.0",
         "jsr:@std/path@^1.0.6"
       ]
     },
@@ -153,7 +189,7 @@
       "dependencies": [
         "jsr:@bearz/chars",
         "jsr:@bearz/fmt",
-        "jsr:@bearz/runtime-info"
+        "jsr:@bearz/runtime-info@^0.0.0"
       ]
     },
     "@bearz/strings@0.0.0": {
@@ -191,12 +227,12 @@
     "@rex/rexfile@0.0.0-alpha.0": {
       "integrity": "a2ceb9ca6be61076f16209b1e4b3b7bb04bea04730f5765be8e7950665c3f645",
       "dependencies": [
-        "jsr:@bearz/dotenv",
+        "jsr:@bearz/dotenv@^0.0.0",
         "jsr:@bearz/env",
-        "jsr:@bearz/exec",
+        "jsr:@bearz/exec@^0.0.1",
         "jsr:@bearz/fs",
         "jsr:@bearz/process-elevated",
-        "jsr:@bearz/shells",
+        "jsr:@bearz/shells@^0.0.1",
         "jsr:@std/path@^1.0.8"
       ]
     },
@@ -324,13 +360,13 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@bearz/ansi@^0.0.0",
+      "jsr:@bearz/ansi@^0.0.1",
       "jsr:@bearz/assert@0.0.0-alpha.2",
       "jsr:@bearz/chars@^0.0.0",
-      "jsr:@bearz/ci-env@^0.0.0",
-      "jsr:@bearz/dotenv@^0.0.0",
+      "jsr:@bearz/ci-env@^0.0.1",
+      "jsr:@bearz/dotenv@^0.0.1",
       "jsr:@bearz/env@^0.0.0",
-      "jsr:@bearz/exec@^0.0.1",
+      "jsr:@bearz/exec@^0.0.2",
       "jsr:@bearz/fmt@^0.0.0",
       "jsr:@bearz/fs@^0.0.0",
       "jsr:@bearz/functional@^0.0.0",
@@ -338,7 +374,7 @@
       "jsr:@bearz/process@^0.0.0",
       "jsr:@bearz/runtime-info@^0.0.0",
       "jsr:@bearz/secrets@^0.0.0",
-      "jsr:@bearz/shells@^0.0.1",
+      "jsr:@bearz/shells@^0.0.2",
       "jsr:@bearz/strings@^0.0.0",
       "jsr:@cliffy/command@1.0.0-rc.7",
       "jsr:@std/encoding@^1.0.5",

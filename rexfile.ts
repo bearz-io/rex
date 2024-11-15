@@ -1,5 +1,5 @@
 import { WINDOWS } from "jsr:@bearz/runtime-info/os";
-import { cmd, deploy, job, scriptTask, task } from "jsr:@rex/rexfile@0.0.0-alpha.0";
+import { cmd, deploy, job, scriptTask, task } from "jsr:@rex/rexfile@0.0.0-alpha.2";
 
 task("test", (_) => console.log("Hello, world!"));
 

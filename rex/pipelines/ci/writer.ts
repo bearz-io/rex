@@ -1,20 +1,16 @@
 import {
     AnsiLogLevel,
     AnsiMode,
-    cyan,
     gray,
-    green,
     magenta,
     red,
     rgb24,
     yellow,
 } from "@bearz/ansi";
-import { DefaultAnsiWriter } from "@bearz/ansi/writer";
-import { CI, CI_DRIVER } from "./driver.ts";
+import { DefaultPipelineWriter } from "@bearz/ci-env";
+import { CI_DRIVER } from "./driver.ts";
 import { sprintf } from "@bearz/fmt/printf";
 import { LogLevel, type RexWriter } from "@rex/primitives";
-import { secretMasker } from "./secrets.ts";
-import type { SecretMasker } from "@bearz/secrets/masker";
 
 function handleStack(stack?: string) {
     stack = stack ?? "";
@@ -87,10 +83,7 @@ export const jobSymbol =
 export const deploySymbol =
     "\x1b[38;2;60;0;255m❯\x1b[39m\x1b[38;2;54;51;204m❯\x1b[39m\x1b[38;2;48;102;153m❯\x1b[39m\x1b[38;2;42;153;102m❯\x1b[39m\x1b[38;2;36;204;51m❯\x1b[39m\x1b[38;2;30;255;0m\x16\x1b[39m";
 
-export class PipelineWriter extends DefaultAnsiWriter implements RexWriter {
-    get secretMasker(): SecretMasker {
-        return secretMasker;
-    }
+export class PipelineWriter extends DefaultPipelineWriter implements RexWriter {
 
     setLogLevel(level: LogLevel): this {
         switch (level) {
@@ -117,111 +110,8 @@ export class PipelineWriter extends DefaultAnsiWriter implements RexWriter {
         return this;
     }
 
-    override enabled(level: AnsiLogLevel): boolean {
+    override enabled(level: AnsiLogLevel | LogLevel): boolean {
         return this.level >= level;
-    }
-
-    levelEnabled(level: LogLevel): boolean {
-        switch (level) {
-            case LogLevel.Debug:
-                return this.level >= AnsiLogLevel.Debug;
-            case LogLevel.Error:
-                return this.level >= AnsiLogLevel.Error;
-            case LogLevel.Fatal:
-                return this.level >= AnsiLogLevel.Critical;
-            case LogLevel.Info:
-                return this.level >= AnsiLogLevel.Information;
-            case LogLevel.Warn:
-                return this.level >= AnsiLogLevel.Warning;
-            case LogLevel.Trace:
-                return this.level >= AnsiLogLevel.Trace;
-        }
-
-        return false;
-    }
-
-    mask(value: string): this {
-        return this.write(secretMasker.mask(value) ?? "");
-    }
-
-    maskLine(value: string): this {
-        return this.writeLine(secretMasker.mask(value) ?? "");
-    }
-
-    /**
-     * Write a command to the output.
-     * @param command The name of the command.
-     * @param args The arguments passed to the command.
-     * @returns The writer instance.
-     */
-    override command(command: string, args: string[]): this {
-        switch (CI_DRIVER) {
-            case "azdo":
-                this.writeLine(`##vso[command]${command} ${args.join(" ")}`);
-                return this;
-            default: {
-                const fmt = `[CMD]: ${command} ${args.join(" ")}`;
-                if (this.settings.stdout) {
-                    this.writeLine(cyan(fmt));
-                    return this;
-                }
-                this.writeLine(fmt);
-                return this;
-            }
-        }
-    }
-
-    /**
-     * Writes the progress of an operation to the output.
-     * @param name The name of the progress indicator.
-     * @param value The value of the progress indicator.
-     * @returns The writer instance.
-     */
-    override progress(name: string, value: number): this {
-        switch (CI_DRIVER) {
-            case "azdo":
-                this.writeLine(`##vso[task.setprogress value=${value};]${name}`);
-                return this;
-            default:
-                if (CI) {
-                    this.writeLine(`${name}: ${green(value + "%")}`);
-                    return this;
-                }
-
-                this.write(`\r${name}: ${green(value + "%")}`);
-                return this;
-        }
-    }
-
-    /**
-     * Start a new group of log messages.
-     * @param name The name of the group.
-     * @returns The writer instance.
-     */
-    override startGroup(name: string): this {
-        switch (CI_DRIVER) {
-            case "azdo":
-                this.writeLine(`##[group]${name}`);
-                return this;
-            case "github":
-                this.writeLine(`::group::${name}`);
-                return this;
-            default:
-                if (this.settings.stdout === true) {
-                    if (this.settings.mode === AnsiMode.TwentyFourBit) {
-                        this.write(groupSymbol);
-                        this.write(` ${rgb24(name, 0xb400ff)}`).writeLine();
-                        return this;
-                    }
-
-                    this.writeLine(magenta(`❯❯❯❯❯ ${name}`));
-                    return this;
-                }
-
-                this.writeLine(`❯❯❯❯❯ ${name}`);
-
-                return this;
-        }
     }
 
     skipGroup(name: string): this {
@@ -270,176 +160,6 @@ export class PipelineWriter extends DefaultAnsiWriter implements RexWriter {
                 this.writeLine("::endgroup::");
                 return this;
             default:
-                return this;
-        }
-    }
-
-    /**
-     * Write a trace message to the output.
-     * @param e The error to write.
-     * @param message The message to write.
-     * @param args The arguments to format the message.
-     * @returns The writer instance.
-     */
-    override trace(e: Error, message?: string | undefined, ...args: unknown[]): this;
-    /**
-     * Write a trace message to the output.
-     * @param message The message to write.
-     * @param args The arguments to format the message.
-     * @returns The writer instance.
-     */
-    override trace(message: string, ...args: unknown[]): this;
-    override trace(): this {
-        if (this.level < AnsiLogLevel.Trace) {
-            return this;
-        }
-
-        const { msg, stack } = handleArguments(arguments);
-        switch (CI_DRIVER) {
-            case "azdo":
-                this.writeLine(`##[debug] [TRACE] ${msg}`);
-                if (stack) {
-                    this.writeLine(stack);
-                }
-                return this;
-            case "github":
-                this.writeLine(`::debug:: [TRACE] ${msg}`);
-                if (stack) {
-                    this.writeLine(stack);
-                }
-                return this;
-            default:
-                {
-                    if (this.settings.stdout) {
-                        if (this.settings.mode === AnsiMode.TwentyFourBit) {
-                            this.write(rgb24("❯ [TRACE]: ", 0xADADAD));
-                        } else {
-                            this.write(gray(`❯ [TRACE]: `));
-                        }
-
-                        this.writeLine(msg);
-                        if (stack) {
-                            this.writeLine(red(stack));
-                        }
-                        return this;
-                    }
-                    this.writeLine(`❯ [TRACE]: ${msg}`);
-                    if (stack) {
-                        this.writeLine(stack);
-                    }
-                }
-                return this;
-        }
-    }
-
-    /**
-     * Write a debug message to the output.
-     * @param e The error to write.
-     * @param message The message to write.
-     * @param args The arguments to format the message.
-     * @returns The writer instance.
-     */
-    override info(e: Error, message?: string | undefined, ...args: unknown[]): this;
-    /**
-     * Write a debug message to the output.
-     * @param message The debug message.
-     * @param args The arguments to format the message.
-     * @returns The writer instance.
-     */
-    override info(message: string, ...args: unknown[]): this;
-    override info(): this {
-        if (this.level < AnsiLogLevel.Information) {
-            return this;
-        }
-
-        const { msg, stack } = handleArguments(arguments);
-        switch (CI_DRIVER) {
-            case "azdo":
-                this.writeLine(`##[debug]${msg}`);
-                if (stack) {
-                    this.writeLine(stack);
-                }
-                return this;
-            case "github":
-                this.writeLine(`::debug::${msg}`);
-                if (stack) {
-                    this.writeLine(stack);
-                }
-                return this;
-            default:
-                {
-                    if (this.settings.stdout) {
-                        if (this.settings.mode === AnsiMode.TwentyFourBit) {
-                            this.write(rgb24("❯ [INFO]:  ", 0x0293FF));
-                        } else {
-                            this.write(cyan("❯ [INFO]:  "));
-                        }
-
-                        this.writeLine(msg);
-                        if (stack) {
-                            this.writeLine(red(stack));
-                        }
-                        return this;
-                    }
-
-                    this.writeLine(`❯ [INFO]:  ${msg}`);
-                    if (stack) {
-                        this.writeLine(stack);
-                    }
-                }
-                return this;
-        }
-    }
-
-    /**
-     * Write a debug message to the output.
-     * @param e The error to write.
-     * @param message The message to write.
-     * @param args The arguments to format the message.
-     * @returns The writer instance.
-     */
-    override debug(e: Error, message?: string | undefined, ...args: unknown[]): this;
-    /**
-     * Write a debug message to the output.
-     * @param message The debug message.
-     * @param args The arguments to format the message.
-     * @returns The writer instance.
-     */
-    override debug(message: string, ...args: unknown[]): this;
-    override debug(): this {
-        if (this.level < AnsiLogLevel.Debug) {
-            return this;
-        }
-
-        const { msg, stack } = handleArguments(arguments);
-        switch (CI_DRIVER) {
-            case "azdo":
-                this.writeLine(`##[debug]${msg}`);
-                if (stack) {
-                    this.writeLine(stack);
-                }
-                return this;
-            case "github":
-                this.writeLine(`::debug::${msg}`);
-                if (stack) {
-                    this.writeLine(stack);
-                }
-                return this;
-            default:
-                {
-                    if (this.settings.stdout) {
-                        this.write(gray("❯ [DEBUG]: "));
-                        this.writeLine(msg);
-                        if (stack) {
-                            this.writeLine(red(stack));
-                        }
-                        return this;
-                    }
-                    this.writeLine(`❯ [DEBUG]: ${msg}`);
-                    if (stack) {
-                        this.writeLine(stack);
-                    }
-                }
                 return this;
         }
     }
